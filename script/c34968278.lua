@@ -68,6 +68,10 @@ end
 function cid.waterfilter(c,tp)
     return c:IsControler(tp) and c:IsAttribute(ATTRIBUTE_WATER)
 end
+function cid.TKspellsearchfilter(c)
+return
+end
+
 
 function cid.spop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
@@ -106,9 +110,9 @@ function cid.spop(e,tp,eg,ep,ev,re,r,rp)
         if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)==0 then         --] Something about special summoning this card?
             return
         end
-    -- local rg=Duel.GetMatchingGroup(cid.rmfilter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,nil)
-       -- if rm and rg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(75476546,0)) then
-         --   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+        --local rg=Duel.GetMatchingGroup(cid.rmfilter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,nil)
+        --if rm and rg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(75476546,0)) then
+          --  Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
            --local tg=rg:Select(tp,1,1,nil)
             --Duel.HintSelection(tg)
             --Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)

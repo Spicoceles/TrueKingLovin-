@@ -18,7 +18,7 @@ local e1=Effect.CreateEffect(c)
 
 	-- Destroy 1 card in hand, add level 3 or lower TK to hand from deck.
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,0))
+	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_SZONE)
@@ -27,9 +27,9 @@ local e1=Effect.CreateEffect(c)
 	e2:SetOperation(cid.e2effectOp)
 	c:RegisterEffect(e2)
 	
-	 --Banish 2 cards from your GY, add 1 level 3 or lower TK monst.
+	 --Banish 2 cards from your GY, add 1 "True King's Cataclysm"
 	local e3=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,3))
+	e3:SetDescription(aux.Stringid(id,2))
 	e3:SetCategory(CATEGORY_REMOVE+CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -99,26 +99,29 @@ return c:IsCode(59975756) and c:IsAbleToHand()
 end
 
 function cid.e3Gravetarg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and cid.tdfilter(chkc) end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and cid.gravefilter(chkc) end
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
-		and Duel.IsExistingTarget(cid.tdfilter,tp,LOCATION_GRAVE,0,2,nil) end
+		and Duel.IsExistingTarget(cid.gravefilter,tp,LOCATION_GRAVE,0,2,nil) end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,cid.tdfilter,tp,LOCATION_GRAVE,0,2,2,nil)
+	local g=Duel.SelectTarget(tp,cid.gravefilter,tp,LOCATION_GRAVE,0,2,2,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,g:GetCount(),0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,cid.CataclysmFilter,0,tp,1)
 end
 
 function cid.e3GraveOp(e,tp,eg,ep,ev,re,r,rp)
+Debug.Message("MADE IT TO GRAVE OPERATOR")
 if not e:GetHandler():IsRelateToEffect(e) then return end
 	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
 	if tg:GetCount()<=0 then return end
 	Duel.Remove(tg,nil,0,REASON_EFFECT)
+Debug.Message("MADE IT PAST REMOVAL")
 	local g=Duel.GetOperatedGroup()
 	if g:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then Duel.ShuffleDeck(tp) end
 	local ct=g:FilterCount(Card.IsLocation,nil,LOCATION_DECK+LOCATION_EXTRA)
+Debug.Message("MADE IT PRIOR TO CT")
 	if ct>0 then
 		Duel.BreakEffect()
-		Duel.Draw(tp,1,REASON_EFFECT)
+		Duel.AddCard(tp,c:IsCode(59975756))
 	end
 end
