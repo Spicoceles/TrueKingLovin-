@@ -114,6 +114,5 @@ function cid.spop(e,tp,eg,ep,ev,re,r,rp)
            --local tg=rg:Select(tp,1,1,nil)
             --Duel.HintSelection(tg)
             --Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)
-        end
     end
 end 
