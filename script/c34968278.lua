@@ -115,7 +115,7 @@ function cid.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function cid.TKstF(c)
-    return c:IsSetCard(0xf9)  and c:IsAbleToHand() and c:IsType(TYPE_SPELL) or c:IsType(TYPE_TRAP)
+    return c:IsAbleToHand() and c:IsType(TYPE_SPELL) and c:IsSetCard(0xf9) or c:IsType(TYPE_TRAP) and c:IsSetCard(0xf9)
 end
 
 function cid.thcon(e,tp,eg,ep,ev,re,r,rp)
