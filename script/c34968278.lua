@@ -38,7 +38,6 @@ function cid.initial_effect(c)
         e3:SetTarget(cid.thtg)
         e3:SetOperation(cid.thop)
         c:RegisterEffect(e3)
-
 end
 
 function cid.desfilter(c)
