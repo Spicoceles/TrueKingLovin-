@@ -34,7 +34,7 @@ function cid.initial_effect(c)
 	e3:SetTarget(cid.e3Gravetarg)
 	e3:SetOperation(cid.e3GraveOp)
 	c:RegisterEffect(e3)
-		-- All "True King" monsters gain 500 ATK
+		-- All level 9 "True King" monsters gain 500 ATK
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)
 	e4:SetCode(EFFECT_UPDATE_ATTACK)
