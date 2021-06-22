@@ -1,5 +1,5 @@
 -- Primordial Burial
-local id,cid=getID()
+local s,id=GetID()
 function cid.initial_effect(c)
 	-- Chain
 	local e1=Effect.CreateEffect(c)
