@@ -102,7 +102,7 @@ function cid.e3GraveOp(e,tp,eg,ep,ev,re,r,rp)
 		local sg=Duel.SelectMatchingCard(tp,cid.CataclysmFilter,tp,LOCATION_DECK,0,1,1,nil)
 		if #sg>0 then
 			Duel.SendtoHand(sg,nil,REASON_EFFECT)
-			Duel.ConfirmCards(1-tp,sg)
+			Duel.ConfirmCards(1,tp,sg)
 		end
 	end
 end
