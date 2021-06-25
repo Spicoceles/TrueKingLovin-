@@ -19,13 +19,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 
 --Special summon from deck
-	e3=Effect.CreateEffect(c)
+	local e3=Effect.CreateEffect(c)
 		e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 		e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 		e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
 		e3:SetRange(LOCATION_FZONE)
 		e3:SetCode(EVENT_SPSUMMON_SUCCESS)
-		e3:SetCountLimit(1,id)
+		e3:SetCountLimit(1,id+2)
 		e3:SetCondition(s.spcon1)
 		e3:SetTarget(s.sptg1)
 		e3:SetOperation(s.spop1)
@@ -38,36 +38,35 @@ function s.initial_effect(c)
 		e4:SetCode(EFFECT_SUMMON_PROC)
 		e4:SetRange(LOCATION_FZONE)
 		e4:SetTargetRange(LOCATION_HAND,0)
-		e4:SetCountLimit(1,id+1)
+		e4:SetCountLimit(1)
 		e4:SetCondition(s.ntcon)
 		e4:SetTarget(aux.FieldSummonProcTg(s.nttg))
-		e4:SetOperation(s.ntop)
 	c:RegisterEffect(e4)
+
+	local e5=Effect.CreateEffect(c)
+		e5:SetRange(LOCATION_FZONE)
+		e5:SetCategory(CATEGORY_DAMAGE)
+		e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
+		e5:SetCode(EVENT_LEAVE_FIELD)
+		e5:SetCondition(s.lpcon)
+		e5:SetTarget(s.lptg)
+--		e5:SetOperation(s.lpop)
+	c:RegisterEffect(e5)
+
 end
 
 	function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 		return c:GetRace()~=RACE_WYRM
 	end
-		-- Metaphys Factor's Normal summon without tribute code
-	function s.ntcon(e,c,minc)
-			if c==nil then return true end
-		return minc==0 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
-	end
-	function s.nttg(e,c)
-			return c:IsLevel(9) and c:IsSetCard(0xf9)
-	end
-	function s.ntop(e,tp,eg,ep,ev,re,r,rp,c)
-			c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(id,1))
-			local e4=Effect.CreateEffect(e:GetHandler())
-			e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-			e4:SetCode(EVENT_PHASE+PHASE_END)
-			e4:SetCountLimit(1)
-			e4:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-			e4:SetLabelObject(c)
-			e4:SetReset(RESET_PHASE+PHASE_END,2)
-			Duel.RegisterEffect(e4,tp)
-	end
-
+		-- Catalyst Field's effect
+function s.ntcon(e,c,minc)
+	if c==nil then return true end
+	return minc==0 and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
+end
+function s.nttg(e,c)
+	return c:IsLevel(9) and c:IsSetCard(0xf9)
+end
+--
 function s.TK9Filter(c,e,tp)
 return c:IsLevel(9) and c:IsSetCard(0xf9) 
 end
@@ -88,4 +87,14 @@ function s.spop1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 	end
+end
+
+function s.lpcon(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    return c:IsPreviousPosition(POS_FACEUP) and not c:IsLocation(LOCATION_DECK)
+end
+
+function s.lptg(e,tp,eg,ep,ev,re,r,rp,chk)
+   if chk==0 then return Duel.CheckLPCost(tp,3000) end
+    Duel.PayLPCost(tp,3000)
 end
