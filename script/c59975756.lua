@@ -42,15 +42,14 @@ function s.initial_effect(c)
 		e4:SetCondition(s.ntcon)
 		e4:SetTarget(aux.FieldSummonProcTg(s.nttg))
 	c:RegisterEffect(e4)
-
+-- Pay 3k lp if this leaves
 	local e5=Effect.CreateEffect(c)
 		e5:SetRange(LOCATION_FZONE)
 		e5:SetCategory(CATEGORY_DAMAGE)
 		e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 		e5:SetCode(EVENT_LEAVE_FIELD)
 		e5:SetCondition(s.lpcon)
-		e5:SetTarget(s.lptg)
---		e5:SetOperation(s.lpop)
+		e5:SetOperation(s.lpop)
 	c:RegisterEffect(e5)
 
 end
@@ -88,13 +87,12 @@ function s.spop1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 	end
 end
-
+-- Take 3k if this card leaves
 function s.lpcon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     return c:IsPreviousPosition(POS_FACEUP) and not c:IsLocation(LOCATION_DECK)
 end
 
-function s.lptg(e,tp,eg,ep,ev,re,r,rp,chk)
-   if chk==0 then return Duel.CheckLPCost(tp,3000) end
-    Duel.PayLPCost(tp,3000)
+function s.lpop(e,tp,eg,ep,ev,re,r,rp,chk)
+ 	Duel.Damage(tp,3000,REASON_EFFECT)
 end
